@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
@@ -27,6 +27,13 @@ export default function App() {
       setCount(count + 1);
     }
   };
+
+  useEffect(() => {
+    if (count === maxValue && maxValue !== null) {
+      Alert.alert('Limit Reached', `The count has reached the maximum value of ${maxValue}.`);
+    }
+  }, [count, maxValue]);
+
 
   return (
     <View style={styles.container}>
