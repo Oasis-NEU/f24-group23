@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import healthInfo from './health_info';
 
 export default function App() {
   const [inputValue, setInputValue] = useState(''); // For storing user input
   const [count, setCount] = useState(0);           // For tracking the count
   const [maxValue, setMaxValue] = useState(null);   // The max value from input
+
+  // Add a new state variable for health info
+  const [healthData, setHealthData] = useState(null);
+
+  useEffect(() => {
+    // Load health data when the component mounts
+    setHealthData(healthInfo);
+  }, []);
 
   const handleInputChange = (text) => {
     // Ensure the user only enters positive integers
@@ -37,6 +46,16 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {/* Add health info bar */}
+      {healthData && (
+        <View style={styles.healthBar}>
+          <Text style={styles.healthText}>Health Info:</Text>
+          <Text>Height: {healthData.height} cm</Text>
+          <Text>Weight: {healthData.weight} kg</Text>
+          <Text>Gender: {healthData.gender}</Text>
+        </View>
+      )}
+
       <Text>Enter your hard limit</Text>
       <TextInput
         style={styles.input}
@@ -66,5 +85,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '80%',
     paddingHorizontal: 10,
+  },
+  healthBar: {
+    backgroundColor: '#e6f3ff',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+    width: '80%',
+  },
+  healthText: {
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
 });
