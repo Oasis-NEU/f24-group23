@@ -23,6 +23,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "entryPoint": "./mainComponent.js"
+    "entryPoint": "./mainComponent.js",
+    "hostUri": "192.168.6.184:8081"
   }
 }

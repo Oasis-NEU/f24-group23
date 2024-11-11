@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from './lib/supabaseClient';
 
 const HealthInfoForm = () => {
   const [heightFeet, setHeightFeet] = useState('');

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import healthInfo from './health_info';
+import { AppRegistry } from 'react-native';
 
 export default function App() {
   const [inputValue, setInputValue] = useState(''); // For storing user input
@@ -98,3 +99,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+AppRegistry.registerComponent('shot-clock', () => App);
