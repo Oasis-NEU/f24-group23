@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { supabase } from '../lib/supabaseClient';
 
 const HealthInfoForm = () => {
   const [heightFeet, setHeightFeet] = useState('');
@@ -8,8 +9,37 @@ const HealthInfoForm = () => {
   const [weight, setWeight] = useState('');
   const [gender, setGender] = useState('');
 
-  const handleSubmit = () => {
-    console.log('Submitting:', { heightFeet, heightInches, weight, gender });
+  const handleSubmit = async () => {
+    try {
+      if (!heightFeet || !heightInches || !weight || !gender) {
+        throw new Error('Please fill in all fields');
+      }
+
+      const { data, error } = await supabase
+        .from('health_info')
+        .insert([
+          {
+            height_ft: parseInt(heightFeet),
+            height_in: parseInt(heightInches),
+            weight: parseFloat(weight),
+            gender: gender,
+            user_id: supabase.auth.user()?.id
+          }
+        ])
+        .select();
+
+      if (error) throw error;
+
+      setHeightFeet('');
+      setHeightInches('');
+      setWeight('');
+      setGender('');
+
+      alert('Health info saved successfully!');
+
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
