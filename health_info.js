@@ -40,11 +40,11 @@ const HealthInfoForm = () => {
             onChangeText={setWeight}
             keyboardType="numeric"
           />
-          <View style={styles.container}>
+          <View style={{ width: '100%' }}>
             <Picker
               selectedValue={gender}
               onValueChange={(itemValue) => setGender(itemValue)}
-              style={styles.picker}
+              style={{ width: '100%' }}
             >
               <Picker.Item label="Select Gender" value="" />
               <Picker.Item label="Male" value="male" />
@@ -53,9 +53,9 @@ const HealthInfoForm = () => {
               <Picker.Item label="Prefer not to say" value="not-specified" />
             </Picker>
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button title="Submit" onPress={handleSubmit} />
+          <View style={styles.buttonContainer}>
+            <Button title="Submit" onPress={handleSubmit} />
+          </View>
         </View>
       </View>
     </View>
@@ -100,13 +100,14 @@ const styles = StyleSheet.create({
   pickerContainer: {
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: 20,
+    width: '100%',
   },
   picker: {
     height: 40,
   },
   buttonContainer: {
-    margin: 20, // Increased margin to ensure separation from Picker
+    marginTop: 10,
   },
 });
 
