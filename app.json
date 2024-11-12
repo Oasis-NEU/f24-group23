@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "shot-clock",
+    "displayName": "shot-clock",
     "slug": "shot-clock",
     "version": "1.0.0",
     "orientation": "portrait",
