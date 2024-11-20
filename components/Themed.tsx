@@ -1,12 +1,12 @@
 /**
  * The purpose of these components is to provide a way to style components in a
- * way that allows optionally overriding the theme color. If this is not 
+ * way that allows optionally overriding the theme color. If this is not
  * needed, you can use the default components from "react-native".
  */
 import { Text as DefaultText, View as DefaultView } from "react-native";
 
-import { useColorSchemeWithDefault } from "@/hooks/useColorSchemeWithDefault";
 import { DarkTheme, DefaultTheme, useTheme } from "@react-navigation/native";
+import { useColorSchemeWithDefault } from "@/hooks/useColorSchemeWithDefault";
 
 type ThemeProps = {
   lightColor?: string;
