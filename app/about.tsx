@@ -1,47 +1,140 @@
-import { StatusBar } from "expo-status-bar";
-import { Dimensions, Platform, StyleSheet } from "react-native";
+import { StyleSheet, Image, ScrollView } from 'react-native';
+import { Text, View } from '@/components/Themed';
+import Disclaimer from '@/components/Disclaimer';
 
-import { Text, View } from "@/components/Themed";
-import Disclaimer from "@/components/Disclaimer";
+interface TeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  image: any;
+}
+
+const teamMembers: TeamMember[] = [
+  {
+    name: "Amar Chandra",
+    role: "Developer",
+    bio: "Computer Science student at Northeastern University specializing in AI and User Experience.",
+    image: require('../assets/images/team/amar.png'),
+  },
+  {
+    name: "Mihir Patankar",
+    role: "Developer",
+    bio: "Computer Science student at Northeastern University specializing in mobile development.",
+    image: require('../assets/images/team/mihir.png'),
+  },
+  {
+    name: "Noah Torres",
+    role: "Developer",
+    bio: "Computer Science student at Northeastern University focusing on software development.",
+    image: require('../assets/images/team/noah.png'),
+  },
+  {
+    name: "Bennett Resner",
+    role: "Developer",
+    bio: "Computer Science student at Northeastern University working on mobile app development.",
+    image: require('../assets/images/team/bennett.png'),
+  },
+  {
+    name: "Fahd Kahn",
+    role: "Developer",
+    bio: "Computer Science student at Northeastern University focusing on software development.",
+    image: require('../assets/images/team/fahd.png'),
+  },
+];
 
 export default function AboutScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Shot Clock</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <Text style={styles.paragraph}>
-        Welcome to shot clock. This is an app made for Oasis.
-      </Text>
-      <Disclaimer style={styles.paragraph} />
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>About OASIS</Text>
+        <Text style={styles.description}>
+          This app was created for the 2024 Oasis @ NEU cohort
+        </Text>
+
+        <Text style={styles.title}>Our Team</Text>
+        {teamMembers.map((member, index) => (
+          <View key={index} style={styles.memberCard}>
+            <Image 
+              source={member.image}
+              style={styles.memberImage}
+            />
+            <Text style={styles.memberName}>{member.name}</Text>
+            <Text style={styles.memberRole}>{member.role}</Text>
+            <Text style={styles.memberBio}>{member.bio}</Text>
+          </View>
+        ))}
+
+        <View style={styles.disclaimerSection}>
+          <Text style={styles.title}>Disclaimer</Text>
+          <Disclaimer style={styles.disclaimerText} />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    rowGap: 20,
+  },
+  content: {
+    padding: 20,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginTop: 20,
   },
-  paragraph: {
-    marginHorizontal: Dimensions.get("window").width * 0.05,
+  description: {
     fontSize: 16,
-    textAlign: "justify",
+    textAlign: 'center',
+    marginBottom: 30,
+    lineHeight: 24,
+    paddingHorizontal: 10,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  memberCard: {
+    width: '100%',
+    maxWidth: 300,
+    alignItems: 'center',
+    marginBottom: 30,
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  memberImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 15,
+  },
+  memberName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  memberRole: {
+    fontSize: 16,
+    opacity: 0.8,
+    marginBottom: 10,
+  },
+  memberBio: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  disclaimerSection: {
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  disclaimerText: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'justify',
   },
 });
