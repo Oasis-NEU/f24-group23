@@ -2,7 +2,7 @@
  * @author Mihir Patankar
  */
 
-import { Gender } from "./types";
+import { Gender } from './types';
 
 /**
  * https://pmc.ncbi.nlm.nih.gov/articles/PMC4361698/
@@ -14,14 +14,7 @@ import { Gender } from "./types";
  * @param t Time since first drink in hours
  * @returns Blood alcohol content in g/100mL
  */
-export const calculateBloodAlcoholContent = (
-  gender: Gender,
-  v: number,
-  z: number,
-  W: number,
-  h: number,
-  t: number
-) => {
+export const calculateBloodAlcoholContent = (gender: Gender, v: number, z: number, W: number, h: number, t: number) => {
   // The elimination rate in g/100mL/hour
   const β = 0.015;
   // Density of alcohol (ethanol)
@@ -53,7 +46,7 @@ export const calculateBreathAlcoholContent = (bloodAlcoholContent: number) => {
  */
 const calculateWidmarkFactor = (gender: Gender, bmi: number) => {
   const [r_male, r_female] = [1.0181 - 0.01213 * bmi, 0.9367 - 0.0124 * bmi];
-  if (gender === "male") return r_male;
-  else if (gender === "female") return r_female;
+  if (gender === 'male') return r_male;
+  else if (gender === 'female') return r_female;
   else return (r_male + r_female) / 2.0;
 };
