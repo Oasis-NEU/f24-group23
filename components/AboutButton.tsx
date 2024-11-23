@@ -1,6 +1,6 @@
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Link } from "expo-router";
-import { Pressable } from "react-native";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Link } from 'expo-router';
+import { Pressable } from 'react-native';
 
 export default function AboutButton(props: { color: string }) {
   return (

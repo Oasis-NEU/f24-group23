@@ -45,12 +45,12 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-
   return (
     <ThemeProvider value={useColorSchemeWithDefault() === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="about" options={{ title: "About", presentation: 'modal' }} />
+        <Stack.Screen name="(tabs)" options={{ title: 'Home', headerShown: false }} />
+        <Stack.Screen name="session" options={{ title: 'Drinking Session', presentation: 'card' }} />
+        <Stack.Screen name="about" options={{ title: 'About', presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
   );

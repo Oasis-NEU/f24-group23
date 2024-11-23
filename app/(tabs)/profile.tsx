@@ -1,8 +1,10 @@
-import { StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
-import { useState } from 'react';
 import { Text, View } from '@/components/Themed';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState } from 'react';
+import { Keyboard, Platform, StyleSheet, TextInput, TouchableWithoutFeedback, useColorScheme } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+
 import { useTheme } from '@react-navigation/native';
+import { useColorSchemeWithDefault } from '@/hooks/useColorSchemeWithDefault';
 
 export default function ProfileScreen() {
   const [feet, setFeet] = useState('');
@@ -16,92 +18,78 @@ export default function ProfileScreen() {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <View style={styles.itemAlign}>
-        <View style={styles.container}>
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Height</Text>
-            <View style={styles.heightContainer}>
-              <View style={styles.heightInput}>
-                <TextInput
-                  style={[styles.input, { color: colors.text }]}
-                  value={feet}
-                  onChangeText={setFeet}
-                  placeholder="Feet"
-                  placeholderTextColor={colors.text + '80'}
-                  keyboardType="numeric"
-                />
-                <Text>ft</Text>
-              </View>
-              <View style={styles.heightInput}>
-                <TextInput
-                  style={[styles.input, { color: colors.text }]}
-                  value={inches}
-                  onChangeText={setInches}
-                  placeholder="Inches"
-                  placeholderTextColor={colors.text + '80'}
-                  keyboardType="numeric"
-                />
-                <Text>in</Text>
-              </View>
-            </View>
-          </View>
+    <GenderPicker />
+    // <TouchableWithoutFeedback onPress={dismissKeyboard}>
+    //   <View style={styles.itemAlign}>
+    //     <View style={styles.container}>
+    //       <View style={styles.formGroup}>
+    //         <Text style={styles.label}>Height</Text>
+    //         <View style={styles.heightContainer}>
+    //           <View style={styles.heightInput}>
+    //             <TextInput
+    //               style={[styles.input, { color: colors.text }]}
+    //               value={feet}
+    //               onChangeText={setFeet}
+    //               placeholder="Feet"
+    //               keyboardType="numeric"
+    //             />
+    //             <Text>ft</Text>
+    //           </View>
+    //           <View style={styles.heightInput}>
+    //             <TextInput
+    //               style={[styles.input, { color: colors.text }]}
+    //               value={inches}
+    //               onChangeText={setInches}
+    //               placeholder="Inches"
+    //               keyboardType="numeric"
+    //             />
+    //             <Text>in</Text>
+    //           </View>
+    //         </View>
+    //       </View>
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Weight (lbs)</Text>
-            <TextInput
-              style={[styles.input, { color: colors.text }]}
-              value={weight}
-              onChangeText={setWeight}
-              placeholder="Weight"
-              placeholderTextColor={colors.text + '80'}
-              keyboardType="numeric"
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Gender</Text>
-            <View style={[styles.pickerContainer, { borderColor: colors.border }]}>
-              {Platform.OS === 'ios' ? (
-                <Picker
-                  selectedValue={gender}
-                  onValueChange={(itemValue) => setGender(itemValue)}
-                  style={[styles.picker, { color: colors.text }]}
-                >
-                  <Picker.Item label="Select gender" value="" color={colors.text} />
-                  <Picker.Item label="Male" value="male" color={colors.text} />
-                  <Picker.Item label="Female" value="female" color={colors.text} />
-                  <Picker.Item label="Non-binary" value="non-binary" color={colors.text} />
-                  <Picker.Item label="Prefer not to say" value="prefer-not-to-say" color={colors.text} />
-                </Picker>
-              ) : (
-                <Picker
-                  selectedValue={gender}
-                  onValueChange={(itemValue) => setGender(itemValue)}
-                  style={[styles.picker, { color: colors.text }]}
-                  dropdownIconColor={colors.text}
-                >
-                  <Picker.Item label="Select gender" value="" />
-                  <Picker.Item label="Male" value="male" />
-                  <Picker.Item label="Female" value="female" />
-                  <Picker.Item label="Non-binary" value="non-binary" />
-                  <Picker.Item label="Prefer not to say" value="prefer-not-to-say" />
-                </Picker>
-              )}
-            </View>
-          </View>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+    //       <View style={styles.formGroup}>
+    //         <Text style={styles.label}>Weight (lbs)</Text>
+    //         <TextInput
+    //           style={[styles.input, { color: colors.text }]}
+    //           value={weight}
+    //           onChangeText={setWeight}
+    //           placeholder="Weight"
+    //           placeholderTextColor={colors.text + '80'}
+    //           keyboardType="numeric"
+    //         />
+    //       </View>
+    //       <View style={styles.formGroup}>
+    //         <Text style={styles.label}>Gender</Text>
+    //         <GenderPicker />
+    //       </View>
+    //     </View>
+    //   </View>
+    // </TouchableWithoutFeedback>
   );
 }
-
+export const GenderPicker = () => {
+  return (
+    <RNPickerSelect
+      darkTheme={useColorSchemeWithDefault() === 'dark'}
+      style={{
+        inputIOSContainer: { pointerEvents: 'none' },
+      }}
+      onValueChange={(value: number) => console.log(value)}
+      placeholder={{ label: 'Enter Gender', value: null }}
+      items={[
+        { label: 'Football', value: 'football' },
+        { label: 'Baseball', value: 'baseball' },
+        { label: 'Hockey', value: 'hockey' },
+      ]}
+    />
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
     width: '100%',
-    maxWidth: 500,
   },
   formGroup: {
     marginBottom: 24,

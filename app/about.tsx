@@ -11,33 +11,33 @@ interface TeamMember {
 
 const teamMembers: TeamMember[] = [
   {
-    name: "Amar Chandra",
-    role: "Developer",
-    bio: "Computer Science student at Northeastern University specializing in AI and User Experience.",
+    name: 'Amar Chandra',
+    role: 'Developer',
+    bio: 'Computer Science student at Northeastern University specializing in AI and User Experience.',
     image: require('../assets/images/team/amar.png'),
   },
   {
-    name: "Mihir Patankar",
-    role: "Developer",
-    bio: "Computer Science student at Northeastern University specializing in mobile development.",
+    name: 'Mihir Patankar',
+    role: 'Developer',
+    bio: 'Computer Science student at Northeastern University specializing in mobile development.',
     image: require('../assets/images/team/mihir.png'),
   },
   {
-    name: "Noah Torres",
-    role: "Developer",
-    bio: "Computer Science student at Northeastern University focusing on software development.",
+    name: 'Noah Torres',
+    role: 'Developer',
+    bio: 'Computer Science student at Northeastern University focusing on software development.',
     image: require('../assets/images/team/noah.png'),
   },
   {
-    name: "Bennett Resner",
-    role: "Developer",
-    bio: "Computer Science student at Northeastern University working on mobile app development.",
+    name: 'Bennett Resner',
+    role: 'Developer',
+    bio: 'Computer Science student at Northeastern University working on mobile app development.',
     image: require('../assets/images/team/bennett.png'),
   },
   {
-    name: "Fahd Kahn",
-    role: "Developer",
-    bio: "Computer Science student at Northeastern University focusing on software development.",
+    name: 'Fahd Kahn',
+    role: 'Developer',
+    bio: 'Computer Science student at Northeastern University focusing on software development.',
     image: require('../assets/images/team/fahd.png'),
   },
 ];
@@ -47,17 +47,12 @@ export default function AboutScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>About OASIS</Text>
-        <Text style={styles.description}>
-          This app was created for the 2024 Oasis @ NEU cohort
-        </Text>
+        <Text style={styles.description}>This app was created for the 2024 Oasis @ NEU cohort</Text>
 
         <Text style={styles.title}>Our Team</Text>
         {teamMembers.map((member, index) => (
           <View key={index} style={styles.memberCard}>
-            <Image 
-              source={member.image}
-              style={styles.memberImage}
-            />
+            <Image source={member.image} style={styles.memberImage} />
             <Text style={styles.memberName}>{member.name}</Text>
             <Text style={styles.memberRole}>{member.role}</Text>
             <Text style={styles.memberBio}>{member.bio}</Text>
