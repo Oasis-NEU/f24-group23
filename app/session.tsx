@@ -1,7 +1,7 @@
+import BACMonitor from '@/components/BACMonitor';
 import Stopwatch from '@/components/Stopwatch';
 import { View } from '@/components/Themed';
 import { loadSession, saveSession } from '@/util/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSearchParams } from 'expo-router/build/hooks';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-native';
@@ -36,6 +36,7 @@ export default function SessionScreen() {
   return (
     <View>
       <Stopwatch time={time} setTime={setTime} />
+      <BACMonitor alcoholMassConsumed={alcoholMassConsumed} time={time} />
       <Button title="Drink" onPress={() => setAlcoholMassConsumed((prev) => prev + 1)} />
     </View>
   );

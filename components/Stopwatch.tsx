@@ -1,8 +1,6 @@
-// Stopwatch.tsx (Child Component)
 import { useEffect } from 'react';
 import { Text, View } from './Themed';
 
-// Stopwatch component receives `time` and `setTime` as props
 export default function Stopwatch({ time, setTime }: { time: number; setTime: (time: number) => void }) {
   useEffect(() => {
     const startTime = Date.now() - time * 1000; // Convert seconds to ms

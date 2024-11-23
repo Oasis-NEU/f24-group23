@@ -1,11 +1,14 @@
-import { cancelSession, sessionExists } from '@/util/storage';
-import { Link } from 'expo-router';
+import { cancelSession as deleteSession, sessionExists } from '@/util/storage';
+import { Link, router } from 'expo-router';
 import { forwardRef, useEffect, useState } from 'react';
-import { Button, ButtonProps, StyleSheet } from 'react-native';
+import { Alert, Button, ButtonProps, StyleSheet } from 'react-native';
 import { View } from './Themed';
+import Dialog from 'react-native-dialog';
 
 export default function SessionControls() {
   const [sessionExistsState, setSessionExistsState] = useState(false);
+  const [dialogVisible, setDialogueVisible] = useState(false);
+  const [sessionLimits, setSessionLimits] = useState({});
 
   useEffect(() => {
     const updateSessionState = async () => {
@@ -15,38 +18,55 @@ export default function SessionControls() {
     updateSessionState();
   }, []);
 
+  const startSession = (resume: 0 | 1) => {
+    router.push(`/session?resume=${resume}`);
+  };
+
+  const showDialog = () => {
+    setDialogueVisible(true);
+  };
+
   return (
     <View style={styles.container}>
-      <Link href={{ pathname: '/session', params: { resume: 0 } }} asChild>
-        <SessionButton
-          title="Start New Session"
-          onPress={() => {
-            setSessionExistsState(true);
-          }}
-        />
-      </Link>
-      <Link href={{ pathname: '/session', params: { resume: 1 } }} asChild>
-        <SessionButton title="Resume Session" onPress={() => {}} disabled={!sessionExistsState} />
-      </Link>
-      <SessionButton
+      <Button
+        title="Start New Session"
+        onPress={() => {
+          setSessionExistsState(true);
+          startSession(0);
+        }}
+      />
+      <Button
+        title="Resume Session"
+        onPress={() => {
+          startSession(1);
+        }}
+        disabled={!sessionExistsState}
+      />
+      <Button
         title="Cancel Session"
         onPress={() => {
-          cancelSession();
-          setSessionExistsState(false);
+          Alert.alert(
+            'Cancel last session',
+            'Are you sure you want to clear your last session?',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Delete',
+                style: 'destructive',
+                onPress: () => {
+                  deleteSession();
+                  setSessionExistsState(false);
+                },
+              },
+            ],
+            { cancelable: true }
+          );
         }}
         disabled={!sessionExistsState}
       />
     </View>
   );
 }
-
-const SessionButton = forwardRef(({ title, onPress, disabled }: ButtonProps, ref) => {
-  return (
-    <View style={styles.container}>
-      <Button title={title} onPress={onPress} disabled={disabled} />
-    </View>
-  );
-});
 
 const styles = StyleSheet.create({
   container: {
