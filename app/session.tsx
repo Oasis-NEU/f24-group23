@@ -39,7 +39,10 @@ export default function SessionScreen() {
         <Stopwatch time={time} setTime={setTime} />
         <BACMonitor alcoholMassConsumed={alcoholMassConsumed} time={time} />
         <Pressable
-          style={styles.button}
+          style={({ pressed }) => [
+            styles.button,
+            pressed && { opacity: 0.7 }
+          ]}
           onPress={() => setAlcoholMassConsumed((prev) => prev + 1)}
         >
           <Text style={styles.buttonText}>Drink</Text>
