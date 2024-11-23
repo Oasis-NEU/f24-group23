@@ -28,42 +28,48 @@ export default function SessionControls() {
 
   return (
     <View style={styles.container}>
-      <Button
-        title="Start New Session"
-        onPress={() => {
-          setSessionExistsState(true);
-          startSession(0);
-        }}
-      />
-      <Button
-        title="Resume Session"
-        onPress={() => {
-          startSession(1);
-        }}
-        disabled={!sessionExistsState}
-      />
-      <Button
-        title="Cancel Session"
-        onPress={() => {
-          Alert.alert(
-            'Cancel last session',
-            'Are you sure you want to clear your last session?',
-            [
-              { text: 'Cancel', style: 'cancel' },
-              {
-                text: 'Delete',
-                style: 'destructive',
-                onPress: () => {
-                  deleteSession();
-                  setSessionExistsState(false);
+      <View style={styles.button}>
+        <Button
+          title="Start New Session"
+          onPress={() => {
+            setSessionExistsState(true);
+            startSession(0);
+          }}
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
+          title="Resume Session"
+          onPress={() => {
+            startSession(1);
+          }}
+          disabled={!sessionExistsState}
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
+          title="Cancel Session"
+          onPress={() => {
+            Alert.alert(
+              'Cancel last session',
+              'Are you sure you want to clear your last session?',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Delete',
+                  style: 'destructive',
+                  onPress: () => {
+                    deleteSession();
+                    setSessionExistsState(false);
+                  },
                 },
-              },
-            ],
-            { cancelable: true }
-          );
-        }}
-        disabled={!sessionExistsState}
-      />
+              ],
+              { cancelable: true }
+            );
+          }}
+          disabled={!sessionExistsState}
+        />
+      </View>
     </View>
   );
 }
@@ -71,5 +77,9 @@ export default function SessionControls() {
 const styles = StyleSheet.create({
   container: {
     margin: 5,
+    alignContent: 'center'
   },
+  button: {
+    margin: 10
+  }
 });
