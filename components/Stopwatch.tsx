@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Text, View } from './Themed';
+import { StyleSheet } from 'react-native';
 
 export default function Stopwatch({ time, setTime }: { time: number; setTime: (time: number) => void }) {
   useEffect(() => {
@@ -23,7 +24,14 @@ export default function Stopwatch({ time, setTime }: { time: number; setTime: (t
 
   return (
     <View>
-      <Text>Elapsed Time: {formatTime(time)}</Text>
+      <Text style={styles.text}>Elapsed Time: {formatTime(time)}</Text>
     </View>
   );
+
 }
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 30
+  }
+})
