@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     gap: 10,
-    width: 1000,
+    maxWidth: 800,
+    width: 'auto',
     borderRadius: 10
   },
   text: {
