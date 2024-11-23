@@ -1,14 +1,12 @@
-import { cancelSession as deleteSession, sessionExists } from '@/util/storage';
-import { Link, router } from 'expo-router';
-import { forwardRef, useEffect, useState } from 'react';
-import { Alert, Button, ButtonProps, StyleSheet } from 'react-native';
+import { cancelSession as deleteSession, loadProfile, sessionExists } from '@/util/storage';
+import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Alert, Button, StyleSheet } from 'react-native';
 import { View } from './Themed';
-import Dialog from 'react-native-dialog';
+import { profileIncomplete } from '@/app/(tabs)/profile';
 
 export default function SessionControls() {
   const [sessionExistsState, setSessionExistsState] = useState(false);
-  const [dialogVisible, setDialogueVisible] = useState(false);
-  const [sessionLimits, setSessionLimits] = useState({});
 
   useEffect(() => {
     const updateSessionState = async () => {
@@ -18,12 +16,8 @@ export default function SessionControls() {
     updateSessionState();
   }, []);
 
-  const startSession = (resume: 0 | 1) => {
-    router.push(`/session?resume=${resume}`);
-  };
-
-  const showDialog = () => {
-    setDialogueVisible(true);
+  const startSession = (resume: 0 | 1, profile: string) => {
+    router.push(`/session?resume=${resume}&profile=${profile}`);
   };
 
   return (
@@ -33,39 +27,37 @@ export default function SessionControls() {
           title="Start New Session"
           onPress={() => {
             setSessionExistsState(true);
-            startSession(0);
+            const start = async () => {
+              const profile = await loadProfile();
+              if (profileIncomplete(profile)) {
+                Alert.alert('Profile Incomplete', 'Please fill out your profile before starting a session.');
+                return;
+              } else {
+                startSession(0, JSON.stringify(profile));
+              }
+            };
+            start();
           }}
         />
       </View>
       <View style={styles.button}>
-        <Button
-          title="Resume Session"
-          onPress={() => {
-            startSession(1);
-          }}
-          disabled={!sessionExistsState}
-        />
+        <Button title="Resume Session" onPress={() => startSession(1, '{}')} disabled={!sessionExistsState} />
       </View>
       <View style={styles.button}>
         <Button
           title="Cancel Session"
           onPress={() => {
-            Alert.alert(
-              'Cancel last session',
-              'Are you sure you want to clear your last session?',
-              [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                  text: 'Delete',
-                  style: 'destructive',
-                  onPress: () => {
-                    deleteSession();
-                    setSessionExistsState(false);
-                  },
+            Alert.alert('Cancel last session', 'Are you sure you want to clear your last session?', [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Delete',
+                style: 'destructive',
+                onPress: () => {
+                  deleteSession();
+                  setSessionExistsState(false);
                 },
-              ],
-              { cancelable: true }
-            );
+              },
+            ]);
           }}
           disabled={!sessionExistsState}
         />
@@ -77,9 +69,9 @@ export default function SessionControls() {
 const styles = StyleSheet.create({
   container: {
     margin: 5,
-    alignContent: 'center'
+    alignContent: 'center',
   },
   button: {
-    margin: 10
-  }
+    margin: 10,
+  },
 });

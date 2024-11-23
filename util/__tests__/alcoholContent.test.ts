@@ -2,8 +2,7 @@
  * @author Mihir Patankar
  */
 
-import { calculateAlcoholMassConsumed, calculateBloodAlcoholContent } from '../alcoholContent';
-import { Gender } from '../types';
+import { Gender, calculateAlcoholMassConsumed, calculateBloodAlcoholContent } from '../alcoholContent';
 
 const examplePerson = {
   gender: 'male',

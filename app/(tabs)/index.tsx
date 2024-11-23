@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    rowGap: 100
+    rowGap: 100,
   },
   title: {
     fontSize: 20,

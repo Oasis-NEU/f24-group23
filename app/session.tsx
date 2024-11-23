@@ -5,6 +5,7 @@ import { View } from '@/components/Themed';
 import { loadSession, saveSession } from '@/util/storage';
 import { useSearchParams } from 'expo-router/build/hooks';
 import { useEffect, useState } from 'react';
+import { Profile } from './(tabs)/profile';
 
 export interface SessionData {
   stopwatchTime: number | null;
@@ -13,24 +14,30 @@ export interface SessionData {
 export default function SessionScreen() {
   const resume = Number(useSearchParams().get('resume'));
 
+  console.log(useSearchParams().get('profile'));
+
+  const freshProfile = JSON.parse(useSearchParams().get('profile') as string);
+
   const [alcoholMassConsumed, setAlcoholMassConsumed] = useState(0);
   const [time, setTime] = useState(0);
+  const [profile, setProfile] = useState<Profile>(freshProfile);
 
   useEffect(() => {
     const load = async () => {
-      const data = await loadSession();
+      const data: Session = await loadSession();
       // The following is a defensive check.
       // Data should never be null because the user wouldn't be able to click resume if there was no session stored.
       if (!data) return;
       setAlcoholMassConsumed(data.alcoholMassConsumed);
       setTime(data.time);
+      setProfile(data.sessionProfile);
     };
     if (resume) load();
   }, []);
 
   // Save sessionData to AsyncStorage whenever anything changes
   useEffect(() => {
-    saveSession({ alcoholMassConsumed, time });
+    saveSession({ alcoholMassConsumed, time, sessionProfile: profile });
   }, [alcoholMassConsumed, time]);
 
   return (
@@ -39,10 +46,7 @@ export default function SessionScreen() {
         <Stopwatch time={time} setTime={setTime} />
         <BACMonitor alcoholMassConsumed={alcoholMassConsumed} time={time} />
         <Pressable
-          style={({ pressed }) => [
-            styles.button,
-            pressed && { opacity: 0.7 }
-          ]}
+          style={({ pressed }) => [styles.button, pressed && { opacity: 0.7 }]}
           onPress={() => setAlcoholMassConsumed((prev) => prev + 1)}
         >
           <Text style={styles.buttonText}>Drink</Text>
@@ -50,7 +54,6 @@ export default function SessionScreen() {
       </View>
     </View>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -61,10 +64,10 @@ const styles = StyleSheet.create({
     maxWidth: 'auto',
     alignItems: 'center',
     fontSize: 35,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   entireContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   component: {
     marginBottom: 20,
@@ -73,12 +76,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
     padding: 20,
     borderRadius: 5,
-    width: '100%'
+    width: '100%',
   },
   buttonText: {
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center'
-  }
-})
+    textAlign: 'center',
+  },
+});
+
+export type Session = {
+  alcoholMassConsumed: number;
+  time: number;
+  sessionProfile: Profile;
+};

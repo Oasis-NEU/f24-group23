@@ -1,3 +1,5 @@
+import { Profile } from '@/app/(tabs)/profile';
+import { Session } from '@/app/session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const sessionExists = async () => {
@@ -9,7 +11,7 @@ export const loadSession = async () => {
   try {
     const storedData = await AsyncStorage.getItem('@session');
     if (storedData) {
-      const data = storedData ? JSON.parse(storedData) : null;
+      const data = JSON.parse(storedData);
       console.info('Loaded session data:', data);
       return data;
     } else {
@@ -21,7 +23,7 @@ export const loadSession = async () => {
   }
 };
 
-export const saveSession = async (session: any) => {
+export const saveSession = async (session: Session) => {
   try {
     await AsyncStorage.setItem('@session', JSON.stringify(session));
     console.info('Saved session data:', { session });
@@ -36,6 +38,31 @@ export const cancelSession = async () => {
     console.info('Cancelled session');
   } catch (e) {
     console.error('Failed to cancel session:', e);
+  }
+};
+
+export const saveProfile = async (profile: Profile) => {
+  try {
+    await AsyncStorage.setItem('@profile', JSON.stringify(profile));
+    console.info('Saved profile data:', { profile });
+  } catch (e) {
+    console.error('Failed to save profile data:', e);
+  }
+};
+
+export const loadProfile = async () => {
+  try {
+    const storedData = await AsyncStorage.getItem('@profile');
+    if (storedData) {
+      const data = JSON.parse(storedData);
+      console.info('Loaded profile data:', data);
+      return data;
+    } else {
+      console.info('No profile data found');
+      return null;
+    }
+  } catch (e) {
+    console.error('Failed to load profile data:', e);
   }
 };
 

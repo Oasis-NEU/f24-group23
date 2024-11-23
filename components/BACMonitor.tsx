@@ -11,7 +11,7 @@ export default function BACMonitor({ alcoholMassConsumed, time }: { alcoholMassC
 
   return (
     <View style={[styles.container, { backgroundColor: BacZone?.color }]}>
-      <Text style={styles.BigText}>{BacZone?.name}</Text>
+      <Text style={styles.title}>{BacZone?.name}</Text>
       <Text style={styles.text}>BAC: {bloodAlcoholContent.toFixed(3)}%</Text>
       <Text style={styles.text}>{BacZone?.description}</Text>
       {bloodAlcoholContent > 0.08 && <Text style={styles.SubText}>You will fail a breathalyzer test.</Text>}
@@ -23,19 +23,18 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     gap: 10,
-    maxWidth: 800,
-    width: 'auto',
-    borderRadius: 10
+    width: '100%',
+    borderRadius: 10,
   },
   text: {
-    fontSize: 20
+    fontSize: 20,
   },
-  BigText: {
+  title: {
     fontWeight: 'bold',
-    fontSize: 30
+    fontSize: 30,
   },
   SubText: {
     fontWeight: 'bold',
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });

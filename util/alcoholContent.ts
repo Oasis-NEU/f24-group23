@@ -2,7 +2,6 @@
  * @author Mihir Patankar
  */
 
-import { Gender } from './types';
 /**
  * @param v Volume consumed in mL
  * @param z ABV of drink
@@ -45,3 +44,5 @@ const calculateWidmarkFactor = (gender: Gender, bmi: number) => {
   else if (gender === 'female') return r_female;
   else return (r_male + r_female) / 2.0;
 };
+
+export type Gender = 'male' | 'female' | 'other';
