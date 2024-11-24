@@ -1,21 +1,28 @@
-import { useState } from 'react';
+import { act, useRef, useState } from 'react';
 import { Picker, View, Text } from './Themed';
 import { Alert, Pressable } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { calculateAlcoholMassConsumed, calculateNumberOfDrinks } from '@/util/alcoholContent';
 import { Profile } from '@/app/(tabs)/profile';
+import { formatTime } from './Stopwatch';
 
 export default function DrinkSelector({
   setAlcoholMassConsumed,
   profile,
+  time,
+  hardLimitExists,
 }: {
   setAlcoholMassConsumed: (updater: (prevState: number) => number) => void;
   profile: Profile;
+  time: number;
+  hardLimitExists: boolean;
 }) {
   const [selectedDrink, setSelectedDrink] = useState<string | null>(null);
   const [selectedDrinkSize, setSelectedDrinkSize] = useState<string | null>(null);
   const [hardLimitReached, setHardLimitReached] = useState(false);
-  const disableAddDrinkButton = !selectedDrink || !selectedDrinkSize || hardLimitReached;
+  const lastDrinkTime = useRef(0);
+  const activeCooldown = lastDrinkTime.current !== 0 ? time <= lastDrinkTime.current + profile.cooldown : false;
+  const disableAddDrinkButton = !selectedDrink || !selectedDrinkSize || hardLimitReached || activeCooldown;
   const ozToMilliliters = (oz: number) => oz * 29.5735;
   const { colors } = useTheme();
 
@@ -31,11 +38,13 @@ export default function DrinkSelector({
           (drinkData.find((drink) => drink.name === selectedDrink)?.abv ?? 0) / 100,
           getFluidQuantityMilliliters()
         );
-
-      if (calculateNumberOfDrinks(newAlcoholMassConsumed) >= profile.hardLimit) {
+      if (hardLimitExists && calculateNumberOfDrinks(newAlcoholMassConsumed) >= profile.hardLimit) {
         setHardLimitReached(true);
+
         Alert.alert('Hard Limit Reached', 'You have reached your hard limit. You are done drinking.');
       }
+      // If the configured cooldown is 0, there is no cooldown.
+      if (profile.cooldown > 0) lastDrinkTime.current = time;
       return newAlcoholMassConsumed;
     });
   };
@@ -85,6 +94,11 @@ export default function DrinkSelector({
       >
         <Text style={{ fontSize: 24, fontWeight: 'bold', textAlign: 'center' }}>Add Drink</Text>
       </Pressable>
+      {activeCooldown && (
+        <Text style={{ fontSize: 24, textAlign: 'center' }}>
+          Cooldown: {formatTime(lastDrinkTime.current + profile.cooldown - time)}
+        </Text>
+      )}
     </View>
   );
 }

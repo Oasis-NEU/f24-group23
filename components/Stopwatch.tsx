@@ -13,16 +13,6 @@ export default function Stopwatch({ time, setTime }: { time: number; setTime: (t
     return () => clearInterval(intervalId);
   }, [setTime, time]);
 
-  /**
-   * @returns Time formatted as HH:mm:ss
-   */
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const formatTimeUnit = (unit: number) => unit.toString().padStart(2, '0');
-    return `${formatTimeUnit(hours)}:${formatTimeUnit(minutes)}:${formatTimeUnit(seconds % 60)}`;
-  };
-
   return (
     <View style={{ flexDirection: 'row' }}>
       <Text style={{ fontSize: 28 }}>Drinking Duration:</Text>
@@ -38,3 +28,13 @@ export default function Stopwatch({ time, setTime }: { time: number; setTime: (t
     </View>
   );
 }
+
+/**
+ * @returns Time formatted as HH:mm:ss
+ */
+export const formatTime = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const formatTimeUnit = (unit: number) => unit.toString().padStart(2, '0');
+  return `${formatTimeUnit(hours)}:${formatTimeUnit(minutes)}:${formatTimeUnit(seconds % 60)}`;
+};

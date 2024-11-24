@@ -1,12 +1,12 @@
 import BACMonitor from '@/components/BACMonitor';
-import { StyleSheet, Pressable, Text } from 'react-native';
+import DrinkSelector from '@/components/DrinkSelector';
 import Stopwatch from '@/components/Stopwatch';
 import { View } from '@/components/Themed';
 import { loadSession, saveSession } from '@/util/storage';
 import { useSearchParams } from 'expo-router/build/hooks';
 import { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import { Profile } from './(tabs)/profile';
-import DrinkSelector from '@/components/DrinkSelector';
 
 export interface SessionData {
   stopwatchTime: number | null;
@@ -20,6 +20,7 @@ export default function SessionScreen() {
   const [time, setTime] = useState(0);
   // If we are resuming, the hope is this will immediately be overwritten with the saved profile as the "freshprofile" will be {}.
   const [profile, setProfile] = useState<Profile>(freshProfile);
+  const hardLimitExists = profile.hardLimit !== 0;
 
   useEffect(() => {
     const load = async () => {
@@ -42,8 +43,18 @@ export default function SessionScreen() {
   return (
     <View style={styles.container}>
       <Stopwatch time={time} setTime={setTime} />
-      <BACMonitor alcoholMassConsumed={alcoholMassConsumed} time={time} profile={profile} />
-      <DrinkSelector setAlcoholMassConsumed={setAlcoholMassConsumed} profile={profile} />
+      <BACMonitor
+        alcoholMassConsumed={alcoholMassConsumed}
+        time={time}
+        profile={profile}
+        hardLimitExists={hardLimitExists}
+      />
+      <DrinkSelector
+        setAlcoholMassConsumed={setAlcoholMassConsumed}
+        time={time}
+        profile={profile}
+        hardLimitExists={hardLimitExists}
+      />
     </View>
   );
 }
@@ -59,11 +70,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
-type Cooldown = {
-  startTime: number;
-  endTime: number;
-};
 
 export type Session = {
   alcoholMassConsumed: number;

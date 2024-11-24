@@ -1,5 +1,5 @@
 /**
- * The purpose of these components is to provide a way to style components in a
+ * This allows Text and View components to be defined in a
  * way that allows optionally overriding the theme color.
  */
 import { Text as DefaultText, View as DefaultView } from 'react-native';

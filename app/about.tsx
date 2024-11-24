@@ -34,21 +34,18 @@ const teamMembers: TeamMember[] = [
     bio: 'Computer Science student at Northeastern University working on mobile app development.',
     image: require('../assets/images/team/bennett.png'),
   },
-  {
-    name: 'Fahd Kahn',
-    role: 'Developer',
-    bio: 'Computer Science student at Northeastern University focusing on software development.',
-    image: require('../assets/images/team/fahd.png'),
-  },
 ];
 
 export default function AboutScreen() {
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.content}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
         <Text style={styles.title}>About OASIS</Text>
         <Text style={styles.description}>This app was created for the 2024 Oasis @ NEU cohort</Text>
-
+        <View>
+          <Text style={styles.title}>Disclaimer</Text>
+          <Disclaimer style={styles.disclaimerText} />
+        </View>
         <Text style={styles.title}>Our Team</Text>
         {teamMembers.map((member, index) => (
           <View key={index} style={styles.memberCard}>
@@ -58,11 +55,6 @@ export default function AboutScreen() {
             <Text style={styles.memberBio}>{member.bio}</Text>
           </View>
         ))}
-
-        <View style={styles.disclaimerSection}>
-          <Text style={styles.title}>Disclaimer</Text>
-          <Disclaimer style={styles.disclaimerText} />
-        </View>
       </View>
     </ScrollView>
   );
@@ -71,23 +63,18 @@ export default function AboutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  content: {
-    padding: 20,
-    alignItems: 'center',
+    margin: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    marginTop: 20,
   },
   description: {
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 30,
     lineHeight: 24,
-    paddingHorizontal: 10,
   },
   memberCard: {
     width: '100%',
@@ -123,13 +110,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
-  disclaimerSection: {
-    width: '100%',
-    paddingHorizontal: 10,
-  },
   disclaimerText: {
     fontSize: 14,
     lineHeight: 20,
-    textAlign: 'justify',
+    textAlign: 'left',
   },
 });

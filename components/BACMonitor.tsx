@@ -8,9 +8,10 @@ type BACMonitorProps = {
   alcoholMassConsumed: number;
   time: number;
   profile: Profile;
+  hardLimitExists: boolean;
 };
 
-export default function BACMonitor({ alcoholMassConsumed, time, profile }: BACMonitorProps) {
+export default function BACMonitor({ alcoholMassConsumed, time, profile, hardLimitExists }: BACMonitorProps) {
   const timeHours = time / 3600;
   const heightMeters = (profile.heightFeet * 12 + profile.heightInches) * 0.0254;
   const weightKg = profile.weight * 0.453592;
@@ -22,7 +23,7 @@ export default function BACMonitor({ alcoholMassConsumed, time, profile }: BACMo
     timeHours
   );
   const numberOfDrinks = calculateNumberOfDrinks(alcoholMassConsumed);
-  const warningStyle = numberOfDrinks >= profile.hardLimit ? { color: 'red' } : {};
+  const warningStyle = hardLimitExists && numberOfDrinks >= profile.hardLimit ? { color: 'red' } : {};
 
   const BacZone = getBacZone(bloodAlcoholContent);
 
@@ -31,7 +32,7 @@ export default function BACMonitor({ alcoholMassConsumed, time, profile }: BACMo
       <Text style={styles.title}>{BacZone?.name}</Text>
       <Text style={styles.text}>BAC: {bloodAlcoholContent.toFixed(3)}%</Text>
       <Text style={[styles.text, warningStyle]}>
-        {numberOfDrinks.toFixed(1)} standard drinks (Hard limit: {profile.hardLimit})
+        {numberOfDrinks.toFixed(1)} standard drinks {hardLimitExists ? `(Hard limit: ${profile.hardLimit})` : ''}
       </Text>
       <Text style={styles.text}>{BacZone?.description}</Text>
       {bloodAlcoholContent > 0.08 && (
@@ -53,6 +54,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 26,
   },
 });

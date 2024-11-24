@@ -5,7 +5,10 @@ import { StyleSheet } from 'react-native';
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Shot Clock</Text>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.title}>Shot Clock</Text>
+        <Text style={styles.subtitle}>Drink Responsibly</Text>
+      </View>
       <SessionControls />
     </View>
   );
@@ -16,10 +19,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    rowGap: 100,
+    rowGap: 50,
   },
   title: {
-    fontSize: 36,
+    fontSize: 42,
     fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: 18,
+    color: 'grey',
   },
 });
