@@ -1,19 +1,21 @@
-import { Text, View } from '@/components/Themed';
+import { Picker, Text, View } from '@/components/Themed';
 import React, { useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 
-import { useColorSchemeWithDefault } from '@/hooks/useColorSchemeWithDefault';
-import { useTheme } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Gender } from '@/util/alcoholContent';
 import { loadProfile, saveProfile } from '@/util/storage';
+import { useTheme } from '@react-navigation/native';
 
 export default function ProfileScreen() {
   const [gender, setGender] = useState<Profile['gender']>(null);
   const [heightFeet, setHeightFeet] = useState(0);
   const [heightInches, setHeightInches] = useState(0);
+  // Weight is in pounds.
   const [weight, setWeight] = useState(0);
+  // Hard limit is in standard drinks.
+  const [hardLimit, setHardLimit] = useState(0);
+  // Cooldown is in seconds.
+  const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
     const load = async () => {
@@ -23,13 +25,15 @@ export default function ProfileScreen() {
       setHeightFeet(data.heightFeet);
       setHeightInches(data.heightInches);
       setWeight(data.weight);
+      setHardLimit(data.hardLimit);
+      setCooldown(data.cooldown);
     };
     load();
   }, []);
 
   useEffect(() => {
-    saveProfile({ gender, heightFeet, heightInches, weight });
-  }, [gender, heightFeet, heightInches, weight]);
+    saveProfile({ gender, heightFeet, heightInches, weight, hardLimit, cooldown });
+  }, [gender, heightFeet, heightInches, weight, hardLimit, cooldown]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -42,12 +46,14 @@ export default function ProfileScreen() {
           setHeightInches={setHeightInches}
         />
         <WeightField weight={weight} setWeight={setWeight} />
+        <HardLimitField hardLimit={hardLimit} setHardLimit={setHardLimit} />
+        <CooldownPicker cooldown={cooldown} setCooldown={setCooldown} />
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
-export const HeightField = ({
+const HeightField = ({
   heightFeet,
   setHeightFeet,
   heightInches,
@@ -61,20 +67,20 @@ export const HeightField = ({
   const inputStyles = createThemedStyles()['input'];
   return (
     <View>
-      <Text style={styles.label}>Height (ft and in)</Text>
+      <Text style={styles.label}>Height (ft and in)*</Text>
       <View style={{ flexDirection: 'row' }}>
         <TextInput
           style={[inputStyles, { width: '50%' }]}
           onChangeText={(text: string) => setHeightFeet(Number(text))}
           value={heightFeet == 0 ? undefined : heightFeet.toString()}
-          placeholder="Feet"
+          placeholder="Enter Feet"
           keyboardType="number-pad"
         />
         <TextInput
           style={[inputStyles, { width: '50%' }]}
           onChangeText={(text: string) => setHeightInches(Number(text))}
           value={heightInches == 0 ? undefined : heightInches.toString()}
-          placeholder="Inches"
+          placeholder="Enter Inches"
           keyboardType="number-pad"
         />
       </View>
@@ -82,23 +88,70 @@ export const HeightField = ({
   );
 };
 
-export const WeightField = ({ weight, setWeight }: { weight: number; setWeight: (weight: number) => void }) => {
+const WeightField = ({ weight, setWeight }: { weight: number; setWeight: (weight: number) => void }) => {
   const inputStyles = createThemedStyles()['input'];
   return (
     <View>
-      <Text style={styles.label}>Weight (lbs)</Text>
+      <Text style={styles.label}>Weight (lbs)*</Text>
       <TextInput
         style={inputStyles}
         onChangeText={(text: string) => setWeight(Number(text))}
         value={weight == 0 ? undefined : weight.toString()}
-        placeholder="Weight"
+        placeholder="Enter Weight"
         keyboardType="number-pad"
       />
     </View>
   );
 };
 
-export const GenderPicker = ({
+const HardLimitField = ({
+  hardLimit,
+  setHardLimit,
+}: {
+  hardLimit: number;
+  setHardLimit: (hardLimit: number) => void;
+}) => {
+  const inputStyles = createThemedStyles()['input'];
+  return (
+    <View>
+      <Text style={styles.label}>Hard Limit (in standard drinks)</Text>
+      <TextInput
+        style={inputStyles}
+        onChangeText={(text: string) => setHardLimit(Number(text))}
+        value={hardLimit == 0 ? undefined : hardLimit.toString()}
+        placeholder="Enter Hard Limit"
+        keyboardType="number-pad"
+      />
+    </View>
+  );
+};
+
+const CooldownPicker = ({ cooldown, setCooldown }: { cooldown: number; setCooldown: (cooldown: number) => void }) => {
+  return (
+    <View>
+      <Text style={styles.label}>Cooldown</Text>
+      <Picker
+        value={cooldown}
+        onValueChange={(value: number) => setCooldown(value)}
+        placeholder={{ label: 'Select Cooldown', value: 0 }}
+        items={[
+          { label: 'None', value: 0 },
+          { label: '10 seconds', value: 10 },
+          { label: '15 minutes', value: 15 * 60 },
+          { label: '30 minutes', value: 30 * 60 },
+          { label: '45 minutes', value: 45 * 60 },
+          { label: '1 hour', value: 60 * 60 },
+          { label: '1 hour 15 minutes', value: 75 * 60 },
+          { label: '1 hour 30 minutes', value: 90 * 60 },
+          { label: '1 hour 45 minutes', value: 105 * 60 },
+          { label: '2 hours', value: 120 * 60 },
+        ]}
+      />
+    </View>
+  );
+};
+
+const GenderPicker = ({
   gender,
   setGender,
 }: {
@@ -107,41 +160,16 @@ export const GenderPicker = ({
 }) => {
   return (
     <View>
-      <Text style={styles.label}>Gender</Text>
-      <RNPickerSelect
-        darkTheme={useColorSchemeWithDefault() === 'dark'}
-        style={{
-          inputIOSContainer: { pointerEvents: 'none' },
-          inputIOS: {
-            width: '100%',
-            textAlign: 'center',
-            fontSize: 16,
-            paddingVertical: 12,
-            paddingHorizontal: 10,
-            borderWidth: 1,
-            borderColor: useTheme().colors.border,
-            borderRadius: 8,
-            backgroundColor: useTheme().colors.background,
-            color: useTheme().colors.text,
-          },
-          placeholder: {
-            color: useTheme().dark ? '#A9A9A9' : '#888888',
-            fontSize: 16,
-          },
-          iconContainer: {
-            top: 10,
-            right: 12,
-          },
-        }}
-        onValueChange={(value: Gender) => setGender(value)}
+      <Text style={styles.label}>Gender*</Text>
+      <Picker
         value={gender}
+        onValueChange={(value: Gender) => setGender(value)}
         placeholder={{ label: 'Enter Gender', value: null }}
         items={[
           { label: 'Male', value: 'male' },
           { label: 'Female', value: 'female' },
           { label: 'Other', value: 'other' },
         ]}
-        Icon={() => <Icon name="arrow-drop-down" size={24} color={useTheme().dark ? '#FFFFFF' : '#000000'} />}
       />
     </View>
   );
@@ -152,7 +180,7 @@ const createThemedStyles = () => {
     input: {
       borderWidth: 1,
       borderColor: useTheme().colors.border,
-      borderRadius: 4,
+      borderRadius: 8,
       color: useTheme().colors.text,
       padding: 12,
     },
@@ -176,6 +204,8 @@ export type Profile = {
   heightFeet: number;
   heightInches: number;
   weight: number;
+  hardLimit: number;
+  cooldown: number;
 };
 
 export const profileIncomplete = (profile: Profile) => {

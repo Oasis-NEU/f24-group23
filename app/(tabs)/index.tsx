@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     rowGap: 100,
   },
   title: {
-    fontSize: 20,
+    fontSize: 36,
     fontWeight: 'bold',
   },
 });

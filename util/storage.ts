@@ -2,14 +2,17 @@ import { Profile } from '@/app/(tabs)/profile';
 import { Session } from '@/app/session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const sessionKey = '@session';
+const profileKey = '@profile';
+
 export const sessionExists = async () => {
-  const sessionKey = await AsyncStorage.getItem('@session');
-  return sessionKey !== null;
+  const session = await AsyncStorage.getItem(sessionKey);
+  return session !== null;
 };
 
 export const loadSession = async () => {
   try {
-    const storedData = await AsyncStorage.getItem('@session');
+    const storedData = await AsyncStorage.getItem(sessionKey);
     if (storedData) {
       const data = JSON.parse(storedData);
       console.info('Loaded session data:', data);
@@ -25,7 +28,7 @@ export const loadSession = async () => {
 
 export const saveSession = async (session: Session) => {
   try {
-    await AsyncStorage.setItem('@session', JSON.stringify(session));
+    await AsyncStorage.setItem(sessionKey, JSON.stringify(session));
     console.info('Saved session data:', { session });
   } catch (e) {
     console.error('Failed to save session data:', e);
@@ -34,7 +37,7 @@ export const saveSession = async (session: Session) => {
 
 export const cancelSession = async () => {
   try {
-    await AsyncStorage.removeItem('@session');
+    await AsyncStorage.removeItem(sessionKey);
     console.info('Cancelled session');
   } catch (e) {
     console.error('Failed to cancel session:', e);
@@ -43,7 +46,7 @@ export const cancelSession = async () => {
 
 export const saveProfile = async (profile: Profile) => {
   try {
-    await AsyncStorage.setItem('@profile', JSON.stringify(profile));
+    await AsyncStorage.setItem(profileKey, JSON.stringify(profile));
     console.info('Saved profile data:', { profile });
   } catch (e) {
     console.error('Failed to save profile data:', e);
@@ -52,7 +55,7 @@ export const saveProfile = async (profile: Profile) => {
 
 export const loadProfile = async () => {
   try {
-    const storedData = await AsyncStorage.getItem('@profile');
+    const storedData = await AsyncStorage.getItem(profileKey);
     if (storedData) {
       const data = JSON.parse(storedData);
       console.info('Loaded profile data:', data);

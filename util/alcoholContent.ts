@@ -8,11 +8,9 @@
  * @returns The mass of alcohol consumed in grams
  */
 export const calculateAlcoholMassConsumed = (v: number, z: number) => {
-  // The assumed absorption proportion (Assume 100% alcohol is absorbed)
-  const a = 1.0;
   // Density of alcohol (ethanol)
   const d = 0.789;
-  return v * z * a * d;
+  return v * z * d;
 };
 
 /**
@@ -26,12 +24,22 @@ export const calculateAlcoholMassConsumed = (v: number, z: number) => {
 export const calculateBloodAlcoholContent = (gender: Gender, m: number, W: number, h: number, t: number) => {
   // The elimination rate in g/100mL/hour
   const β = 0.015;
+  // The assumed absorption proportion (Assume 100% alcohol is absorbed)
+  const a = 1.0;
+  const m_absorbed = m * a;
   const bmi = W / Math.pow(h, 2);
   const r = calculateWidmarkFactor(gender, bmi);
-  const C_0 = (100 * m) / (r * W) / 1000.0;
+  const C_0 = (100 * m_absorbed) / (r * W) / 1000.0;
   const C_t = C_0 - β * t;
   return Math.max(C_t, 0.0);
 };
+
+/**
+ * https://www.niaaa.nih.gov/alcohols-effects-health/overview-alcohol-consumption/what-standard-drink
+ * @param m Mass of alcohol consumed in grams
+ * @returns Number of standard drinks consumed
+ */
+export const calculateNumberOfDrinks = (m: number) => m / 14.0;
 
 /**
  * Equations are from https://pmc.ncbi.nlm.nih.gov/articles/PMC4361698/table/table2-0025802414524385/
