@@ -59,7 +59,6 @@ export default function SessionScreen() {
         profile={profile}
         hardLimitExists={hardLimitExists}
       />
-      *
       <Pressable onPress={makeCall} style={styles.callButton}>
         <Text style={styles.callButtonText}>Call Northeastern Police Department</Text>
       </Pressable>
