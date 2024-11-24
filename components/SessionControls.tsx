@@ -1,4 +1,4 @@
-import { cancelSession as deleteSession, loadProfile, sessionExists } from '@/util/storage';
+import { deleteSession, loadProfile, sessionExists } from '@/util/storage';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Button, StyleSheet } from 'react-native';
@@ -22,17 +22,19 @@ export default function SessionControls() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.button}>
+      <View style={styles.buttonContainer}>
         <Button
           title="Start New Session"
           onPress={() => {
-            setSessionExistsState(true);
             const start = async () => {
               const profile = await loadProfile();
               if (profileIncomplete(profile)) {
-                Alert.alert('Profile Incomplete', 'Please fill out your profile before starting a session.');
+                Alert.alert('Profile Incomplete', 'Please fill out your profile before starting a session.', [
+                  { text: 'Go to Profile', style: 'cancel', onPress: () => router.push('/profile') },
+                ]);
                 return;
               } else {
+                setSessionExistsState(true);
                 startSession(0, JSON.stringify(profile));
               }
             };
@@ -40,12 +42,12 @@ export default function SessionControls() {
           }}
         />
       </View>
-      <View style={styles.button}>
-        <Button title="Resume Session" onPress={() => startSession(1, '{}')} disabled={!sessionExistsState} />
+      <View style={styles.buttonContainer}>
+        <Button title="Resume Previous Session" onPress={() => startSession(1, '{}')} disabled={!sessionExistsState} />
       </View>
-      <View style={styles.button}>
+      <View style={styles.buttonContainer}>
         <Button
-          title="Cancel Session"
+          title="Delete Previous Session"
           onPress={() => {
             Alert.alert('Cancel last session', 'Are you sure you want to clear your last session?', [
               { text: 'Cancel', style: 'cancel' },
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     margin: 5,
     alignContent: 'center',
   },
-  button: {
+  buttonContainer: {
     margin: 10,
   },
 });

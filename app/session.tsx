@@ -1,18 +1,12 @@
 import BACMonitor from '@/components/BACMonitor';
 import DrinkSelector from '@/components/DrinkSelector';
 import Stopwatch from '@/components/Stopwatch';
-import { View, Text } from '@/components/Themed';
+import { Text, View } from '@/components/Themed';
 import { loadSession, saveSession } from '@/util/storage';
 import { useSearchParams } from 'expo-router/build/hooks';
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { Profile } from './(tabs)/profile';
-import call from 'react-native-phone-call';
-import { Pressable } from 'react-native';
-
-export interface SessionData {
-  stopwatchTime: number | null;
-}
 
 export default function SessionScreen() {
   const resume = Number(useSearchParams().get('resume'));
@@ -20,7 +14,7 @@ export default function SessionScreen() {
 
   const [alcoholMassConsumed, setAlcoholMassConsumed] = useState(0);
   const [time, setTime] = useState(0);
-  // If we are resuming, the hope is this will immediately be overwritten with the saved profile as the "freshprofile" will be {}.
+  // If we are resuming, the hope is this will immediately be overwritten with the saved profile and the "freshprofile" will be {}.
   const [profile, setProfile] = useState<Profile>(freshProfile);
   const hardLimitExists = profile.hardLimit !== 0;
 
@@ -43,11 +37,11 @@ export default function SessionScreen() {
   }, [alcoholMassConsumed, time]);
 
   const makeCall = () => {
-    const args = {
-      number: '6173733333', // Replace with the desired phone number
-      prompt: true, // Optional: Show the prompt before calling
-    };
-    call(args).catch(console.error); // Call the number
+    // const args = {
+    //   number: '6173733333', // Replace with the desired phone number
+    //   prompt: true, // Optional: Show the prompt before calling
+    // };
+    // call(args).catch(console.error); // Call the number
   };
 
   return (
@@ -65,6 +59,7 @@ export default function SessionScreen() {
         profile={profile}
         hardLimitExists={hardLimitExists}
       />
+      *
       <Pressable onPress={makeCall} style={styles.callButton}>
         <Text style={styles.callButtonText}>Call Northeastern Police Department</Text>
       </Pressable>
@@ -83,16 +78,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   callButton: {
-    backgroundColor: '#007AFF', // Example button color
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: '#8B0000',
+    borderRadius: 8,
+    position: 'absolute',
+    bottom: 20,
   },
   callButtonText: {
-    color: '#FFFFFF',
+    color: 'white',
     textAlign: 'center',
     padding: 10,
     fontSize: 15,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });
 

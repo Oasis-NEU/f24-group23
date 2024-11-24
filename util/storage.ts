@@ -35,7 +35,7 @@ export const saveSession = async (session: Session) => {
   }
 };
 
-export const cancelSession = async () => {
+export const deleteSession = async () => {
   try {
     await AsyncStorage.removeItem(sessionKey);
     console.info('Cancelled session');
@@ -67,9 +67,4 @@ export const loadProfile = async () => {
   } catch (e) {
     console.error('Failed to load profile data:', e);
   }
-};
-
-export const clearStorage = async () => {
-  console.warn('CLEARING STORAGE');
-  await AsyncStorage.clear();
 };
