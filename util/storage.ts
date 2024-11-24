@@ -15,7 +15,6 @@ export const loadSession = async () => {
     const storedData = await AsyncStorage.getItem(sessionKey);
     if (storedData) {
       const data = JSON.parse(storedData);
-      console.info('Loaded session data:', data);
       return data;
     } else {
       console.info('No session data found');
@@ -29,7 +28,6 @@ export const loadSession = async () => {
 export const saveSession = async (session: Session) => {
   try {
     await AsyncStorage.setItem(sessionKey, JSON.stringify(session));
-    console.info('Saved session data:', { session });
   } catch (e) {
     console.error('Failed to save session data:', e);
   }
@@ -38,7 +36,6 @@ export const saveSession = async (session: Session) => {
 export const deleteSession = async () => {
   try {
     await AsyncStorage.removeItem(sessionKey);
-    console.info('Cancelled session');
   } catch (e) {
     console.error('Failed to cancel session:', e);
   }
@@ -47,7 +44,6 @@ export const deleteSession = async () => {
 export const saveProfile = async (profile: Profile) => {
   try {
     await AsyncStorage.setItem(profileKey, JSON.stringify(profile));
-    console.info('Saved profile data:', { profile });
   } catch (e) {
     console.error('Failed to save profile data:', e);
   }
@@ -58,7 +54,6 @@ export const loadProfile = async () => {
     const storedData = await AsyncStorage.getItem(profileKey);
     if (storedData) {
       const data = JSON.parse(storedData);
-      console.info('Loaded profile data:', data);
       return data;
     } else {
       console.info('No profile data found');

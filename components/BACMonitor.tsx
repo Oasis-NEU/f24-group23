@@ -25,16 +25,16 @@ export default function BACMonitor({ alcoholMassConsumed, time, profile, hardLim
   const numberOfDrinks = calculateNumberOfDrinks(alcoholMassConsumed);
   const warningStyle = hardLimitExists && numberOfDrinks >= profile.hardLimit ? { color: 'red' } : {};
 
-  const BacZone = getBacZone(bloodAlcoholContent);
+  const bacZone = getBacZone(bloodAlcoholContent);
 
   return (
-    <View style={[styles.container, { backgroundColor: BacZone?.color }]}>
-      <Text style={styles.title}>{BacZone?.name}</Text>
+    <View style={[styles.container, { backgroundColor: bacZone?.color }]}>
+      <Text style={styles.title}>{bacZone?.name}</Text>
       <Text style={styles.text}>BAC: {bloodAlcoholContent.toFixed(3)}%</Text>
       <Text style={[styles.text, warningStyle]}>
         {numberOfDrinks.toFixed(1)} standard drinks {hardLimitExists ? `(Hard limit: ${profile.hardLimit})` : ''}
       </Text>
-      <Text style={styles.text}>{BacZone?.description}</Text>
+      <Text style={styles.text}>{bacZone?.description}</Text>
       {bloodAlcoholContent > 0.08 && (
         <Text style={[styles.text, { fontWeight: 'bold' }]}>You will fail a breathalyzer test.</Text>
       )}
