@@ -1,12 +1,14 @@
 import BACMonitor from '@/components/BACMonitor';
 import DrinkSelector from '@/components/DrinkSelector';
 import Stopwatch from '@/components/Stopwatch';
-import { View } from '@/components/Themed';
+import { View, Text } from '@/components/Themed';
 import { loadSession, saveSession } from '@/util/storage';
 import { useSearchParams } from 'expo-router/build/hooks';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Profile } from './(tabs)/profile';
+import call from 'react-native-phone-call';
+import { Pressable } from 'react-native';
 
 export interface SessionData {
   stopwatchTime: number | null;
@@ -40,6 +42,14 @@ export default function SessionScreen() {
     saveSession({ alcoholMassConsumed, time, sessionProfile: profile });
   }, [alcoholMassConsumed, time]);
 
+  const makeCall = () => {
+    const args = {
+      number: '6173733333', // Replace with the desired phone number
+      prompt: true, // Optional: Show the prompt before calling
+    };
+    call(args).catch(console.error); // Call the number
+  };
+
   return (
     <View style={styles.container}>
       <Stopwatch time={time} setTime={setTime} />
@@ -55,6 +65,9 @@ export default function SessionScreen() {
         profile={profile}
         hardLimitExists={hardLimitExists}
       />
+      <Pressable onPress={makeCall} style={styles.callButton}>
+        <Text style={styles.callButtonText}>Call Northeastern Police Department</Text>
+      </Pressable>
     </View>
   );
 }
@@ -68,6 +81,18 @@ const styles = StyleSheet.create({
   },
   component: {
     marginBottom: 20,
+  },
+  callButton: {
+    backgroundColor: '#007AFF', // Example button color
+    padding: 10,
+    borderRadius: 5,
+  },
+  callButtonText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    padding: 10,
+    fontSize: 15,
+    fontWeight: 'bold'
   },
 });
 
